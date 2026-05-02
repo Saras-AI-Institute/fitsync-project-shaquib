@@ -3,15 +3,18 @@ from modules.processor import process_data
 import pandas as pd
 import plotly.express as px
 
+# Add caching for data processing step
+def load_data():
+    return process_data()
+
 # Set up the page configuration
 st.set_page_config(layout="wide", page_title="FitSync")
 
 # Add a title to the app
 st.title("FitSync - Personal Health Analytics")
 
-# Process and load the data
-df = process_data()
-
+# Process and load the data with caching
+df = st.cache_data(load_data)()
 # Sidebar for filters
 st.sidebar.header("Filters")
 time_range = st.sidebar.selectbox(
@@ -95,3 +98,4 @@ with col1:
 
 with col2:
     st.plotly_chart(line_chart_calories, use_container_width=True)
+
